@@ -35,6 +35,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.destinationLabel = new System.Windows.Forms.Label();
+            this.colorModelBox = new System.Windows.Forms.ComboBox();
+            this.channel1Box = new System.Windows.Forms.CheckBox();
+            this.channel2Box = new System.Windows.Forms.CheckBox();
+            this.channel3Box = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -105,11 +109,62 @@
             this.destinationLabel.Text = "원본";
             this.destinationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // colorModelBox
+            // 
+            this.colorModelBox.FormattingEnabled = true;
+            this.colorModelBox.Items.AddRange(new object[] {
+            "RGB",
+            "HSV",
+            "YCrCb",
+            "Gray"});
+            this.colorModelBox.Location = new System.Drawing.Point(15, 554);
+            this.colorModelBox.Name = "colorModelBox";
+            this.colorModelBox.Size = new System.Drawing.Size(121, 20);
+            this.colorModelBox.TabIndex = 7;
+            this.colorModelBox.SelectedIndexChanged += new System.EventHandler(this.ColorModelBox_SelectedIndexChanged);
+            // 
+            // channel1Box
+            // 
+            this.channel1Box.Appearance = System.Windows.Forms.Appearance.Button;
+            this.channel1Box.Location = new System.Drawing.Point(153, 554);
+            this.channel1Box.Name = "channel1Box";
+            this.channel1Box.Size = new System.Drawing.Size(55, 20);
+            this.channel1Box.TabIndex = 8;
+            this.channel1Box.Text = "R";
+            this.channel1Box.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.channel1Box.UseVisualStyleBackColor = true;
+            // 
+            // channel2Box
+            // 
+            this.channel2Box.Appearance = System.Windows.Forms.Appearance.Button;
+            this.channel2Box.Location = new System.Drawing.Point(214, 554);
+            this.channel2Box.Name = "channel2Box";
+            this.channel2Box.Size = new System.Drawing.Size(55, 20);
+            this.channel2Box.TabIndex = 9;
+            this.channel2Box.Text = "G";
+            this.channel2Box.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.channel2Box.UseVisualStyleBackColor = true;
+            // 
+            // channel3Box
+            // 
+            this.channel3Box.Appearance = System.Windows.Forms.Appearance.Button;
+            this.channel3Box.Location = new System.Drawing.Point(275, 553);
+            this.channel3Box.Name = "channel3Box";
+            this.channel3Box.Size = new System.Drawing.Size(55, 20);
+            this.channel3Box.TabIndex = 10;
+            this.channel3Box.Text = "B";
+            this.channel3Box.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.channel3Box.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1309, 638);
+            this.Controls.Add(this.channel3Box);
+            this.Controls.Add(this.channel2Box);
+            this.Controls.Add(this.channel1Box);
+            this.Controls.Add(this.colorModelBox);
             this.Controls.Add(this.destinationLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -136,6 +191,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label destinationLabel;
+        private System.Windows.Forms.ComboBox colorModelBox;
+        private System.Windows.Forms.CheckBox channel1Box;
+        private System.Windows.Forms.CheckBox channel2Box;
+        private System.Windows.Forms.CheckBox channel3Box;
     }
 }
 

@@ -25,6 +25,7 @@ namespace TransVison
             stream.NewFrame += new NewFrameEventHandler(Video_Stream);
             stream.Login = "admin0101";
             stream.Password = "kkmd1234";
+            colorModelBox.SelectedIndex = 0;
         }
         private void ConnectBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -52,6 +53,29 @@ namespace TransVison
             Bitmap currentBitmap = (Bitmap)eventArgs.Frame.Clone();
             originalBox.Image?.Dispose();
             originalBox.Image = currentBitmap;
+        }
+
+        private void ColorModelBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ColorModelChanged((ColorModel)colorModelBox.SelectedItem);
+        }
+
+        private void ColorModelChanged(ColorModel model)
+        {
+            switch (model)
+            {
+                case ColorModel.RGB:
+                    channel1Box.Text = "R";
+                    channel2Box.Text = "G";
+                    channel3Box.Text = "B";
+                    break;
+                case ColorModel.HSV:
+                    break;
+                case ColorModel.YCrCb:
+                    break;
+                case ColorModel.GRAY:
+                    break;
+            }
         }
     }
 }
