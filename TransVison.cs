@@ -20,6 +20,18 @@ namespace TransVison
         BINARY = 4,
     }
 
+    public enum FilterType
+    {
+        MEDIAN = 0,
+        MEAN = 1,
+        SOBEL= 2,
+        GAUSSIAN = 3,
+        CANNY = 4,
+        ROBERTS = 5,
+        PREWITT = 6,
+        LAPLACIAN = 7, 
+    }
+
     static internal class TransVison
     {
         static public Mat GetHSV(Bitmap source)

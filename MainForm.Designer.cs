@@ -178,7 +178,9 @@
             // 
             // filterScrollBar
             // 
+            this.filterScrollBar.LargeChange = 1;
             this.filterScrollBar.Location = new System.Drawing.Point(15, 607);
+            this.filterScrollBar.Maximum = 7;
             this.filterScrollBar.Name = "filterScrollBar";
             this.filterScrollBar.Size = new System.Drawing.Size(121, 22);
             this.filterScrollBar.TabIndex = 13;
@@ -190,7 +192,7 @@
             this.filterLabel.Name = "filterLabel";
             this.filterLabel.Size = new System.Drawing.Size(123, 23);
             this.filterLabel.TabIndex = 14;
-            this.filterLabel.Text = "Filter";
+            this.filterLabel.Text = "필터 없음";
             this.filterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm

@@ -175,7 +175,8 @@ namespace TransVison
         }
         private void FilterScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
-
+            FilterType type = (FilterType)filterScrollBar.Value;
+            filterLabel.Text = type.ToString();
         }
         private void SetCheckBoxHide(bool flag)
         {
