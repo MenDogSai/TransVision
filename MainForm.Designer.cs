@@ -33,14 +33,17 @@
             this.pathBox = new System.Windows.Forms.TextBox();
             this.connectBox = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.destinationLabel = new System.Windows.Forms.Label();
             this.colorModelBox = new System.Windows.Forms.ComboBox();
             this.channel1Box = new System.Windows.Forms.CheckBox();
             this.channel2Box = new System.Windows.Forms.CheckBox();
             this.channel3Box = new System.Windows.Forms.CheckBox();
+            this.thresholdLabel = new System.Windows.Forms.Label();
+            this.thresholdNumeric = new System.Windows.Forms.NumericUpDown();
+            this.filterScrollBar = new System.Windows.Forms.HScrollBar();
+            this.filterLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // originalBox
@@ -90,25 +93,6 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "경로";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(301, 508);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "원본";
-            // 
-            // destinationLabel
-            // 
-            this.destinationLabel.AutoSize = true;
-            this.destinationLabel.Location = new System.Drawing.Point(959, 508);
-            this.destinationLabel.Name = "destinationLabel";
-            this.destinationLabel.Size = new System.Drawing.Size(29, 12);
-            this.destinationLabel.TabIndex = 6;
-            this.destinationLabel.Text = "원본";
-            this.destinationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // colorModelBox
             // 
             this.colorModelBox.FormattingEnabled = true;
@@ -116,7 +100,8 @@
             "RGB",
             "HSV",
             "YCrCb",
-            "Gray"});
+            "Gray",
+            "Binary"});
             this.colorModelBox.Location = new System.Drawing.Point(15, 554);
             this.colorModelBox.Name = "colorModelBox";
             this.colorModelBox.Size = new System.Drawing.Size(121, 20);
@@ -128,45 +113,99 @@
             this.channel1Box.Appearance = System.Windows.Forms.Appearance.Button;
             this.channel1Box.Location = new System.Drawing.Point(153, 554);
             this.channel1Box.Name = "channel1Box";
-            this.channel1Box.Size = new System.Drawing.Size(55, 20);
+            this.channel1Box.Size = new System.Drawing.Size(70, 20);
             this.channel1Box.TabIndex = 8;
-            this.channel1Box.Text = "R";
+            this.channel1Box.Text = "CH1";
             this.channel1Box.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.channel1Box.UseVisualStyleBackColor = true;
+            this.channel1Box.CheckedChanged += new System.EventHandler(this.Channel1Box_CheckedChanged);
             // 
             // channel2Box
             // 
             this.channel2Box.Appearance = System.Windows.Forms.Appearance.Button;
-            this.channel2Box.Location = new System.Drawing.Point(214, 554);
+            this.channel2Box.Location = new System.Drawing.Point(229, 554);
             this.channel2Box.Name = "channel2Box";
-            this.channel2Box.Size = new System.Drawing.Size(55, 20);
+            this.channel2Box.Size = new System.Drawing.Size(70, 20);
             this.channel2Box.TabIndex = 9;
-            this.channel2Box.Text = "G";
+            this.channel2Box.Text = "CH2";
             this.channel2Box.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.channel2Box.UseVisualStyleBackColor = true;
+            this.channel2Box.CheckedChanged += new System.EventHandler(this.Channel2Box_CheckedChanged);
             // 
             // channel3Box
             // 
             this.channel3Box.Appearance = System.Windows.Forms.Appearance.Button;
-            this.channel3Box.Location = new System.Drawing.Point(275, 553);
+            this.channel3Box.Location = new System.Drawing.Point(305, 554);
             this.channel3Box.Name = "channel3Box";
-            this.channel3Box.Size = new System.Drawing.Size(55, 20);
+            this.channel3Box.Size = new System.Drawing.Size(70, 20);
             this.channel3Box.TabIndex = 10;
-            this.channel3Box.Text = "B";
+            this.channel3Box.Text = "CH3";
             this.channel3Box.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.channel3Box.UseVisualStyleBackColor = true;
+            this.channel3Box.CheckedChanged += new System.EventHandler(this.Channel3Box_CheckedChanged);
+            // 
+            // thresholdLabel
+            // 
+            this.thresholdLabel.AutoSize = true;
+            this.thresholdLabel.Location = new System.Drawing.Point(153, 558);
+            this.thresholdLabel.Name = "thresholdLabel";
+            this.thresholdLabel.Size = new System.Drawing.Size(45, 12);
+            this.thresholdLabel.TabIndex = 11;
+            this.thresholdLabel.Text = "임계값:";
+            // 
+            // thresholdNumeric
+            // 
+            this.thresholdNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.thresholdNumeric.Location = new System.Drawing.Point(206, 554);
+            this.thresholdNumeric.Maximum = new decimal(new int[] {
+            254,
+            0,
+            0,
+            0});
+            this.thresholdNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.thresholdNumeric.Name = "thresholdNumeric";
+            this.thresholdNumeric.Size = new System.Drawing.Size(70, 21);
+            this.thresholdNumeric.TabIndex = 12;
+            this.thresholdNumeric.Value = new decimal(new int[] {
+            125,
+            0,
+            0,
+            0});
+            // 
+            // filterScrollBar
+            // 
+            this.filterScrollBar.Location = new System.Drawing.Point(15, 607);
+            this.filterScrollBar.Name = "filterScrollBar";
+            this.filterScrollBar.Size = new System.Drawing.Size(121, 22);
+            this.filterScrollBar.TabIndex = 13;
+            this.filterScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FilterScrollBar_Scroll);
+            // 
+            // filterLabel
+            // 
+            this.filterLabel.Location = new System.Drawing.Point(13, 586);
+            this.filterLabel.Name = "filterLabel";
+            this.filterLabel.Size = new System.Drawing.Size(123, 23);
+            this.filterLabel.TabIndex = 14;
+            this.filterLabel.Text = "Filter";
+            this.filterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1309, 638);
+            this.Controls.Add(this.filterLabel);
+            this.Controls.Add(this.filterScrollBar);
+            this.Controls.Add(this.thresholdNumeric);
+            this.Controls.Add(this.thresholdLabel);
             this.Controls.Add(this.channel3Box);
             this.Controls.Add(this.channel2Box);
             this.Controls.Add(this.channel1Box);
             this.Controls.Add(this.colorModelBox);
-            this.Controls.Add(this.destinationLabel);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.connectBox);
             this.Controls.Add(this.pathBox);
@@ -177,6 +216,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,12 +229,14 @@
         private System.Windows.Forms.TextBox pathBox;
         private System.Windows.Forms.CheckBox connectBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label destinationLabel;
         private System.Windows.Forms.ComboBox colorModelBox;
         private System.Windows.Forms.CheckBox channel1Box;
         private System.Windows.Forms.CheckBox channel2Box;
         private System.Windows.Forms.CheckBox channel3Box;
+        private System.Windows.Forms.Label thresholdLabel;
+        private System.Windows.Forms.NumericUpDown thresholdNumeric;
+        private System.Windows.Forms.HScrollBar filterScrollBar;
+        private System.Windows.Forms.Label filterLabel;
     }
 }
 
