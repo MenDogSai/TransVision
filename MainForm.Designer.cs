@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.originalBox = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.filterBox = new System.Windows.Forms.PictureBox();
             this.pathBox = new System.Windows.Forms.TextBox();
             this.connectBox = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -37,13 +37,15 @@
             this.channel1Box = new System.Windows.Forms.CheckBox();
             this.channel2Box = new System.Windows.Forms.CheckBox();
             this.channel3Box = new System.Windows.Forms.CheckBox();
-            this.thresholdLabel = new System.Windows.Forms.Label();
-            this.thresholdNumeric = new System.Windows.Forms.NumericUpDown();
             this.filterScrollBar = new System.Windows.Forms.HScrollBar();
             this.filterLabel = new System.Windows.Forms.Label();
+            this.thresholdLabel = new System.Windows.Forms.Label();
+            this.thresholdBar = new System.Windows.Forms.TrackBar();
+            this.filterSizeLabel = new System.Windows.Forms.Label();
+            this.filterSizeBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.thresholdNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filterBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdBar)).BeginInit();
             this.SuspendLayout();
             // 
             // originalBox
@@ -55,14 +57,14 @@
             this.originalBox.TabIndex = 0;
             this.originalBox.TabStop = false;
             // 
-            // pictureBox2
+            // filterBox
             // 
-            this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(658, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(640, 480);
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
+            this.filterBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.filterBox.Location = new System.Drawing.Point(658, 12);
+            this.filterBox.Name = "filterBox";
+            this.filterBox.Size = new System.Drawing.Size(640, 480);
+            this.filterBox.TabIndex = 1;
+            this.filterBox.TabStop = false;
             // 
             // pathBox
             // 
@@ -144,43 +146,11 @@
             this.channel3Box.UseVisualStyleBackColor = true;
             this.channel3Box.CheckedChanged += new System.EventHandler(this.Channel3Box_CheckedChanged);
             // 
-            // thresholdLabel
-            // 
-            this.thresholdLabel.AutoSize = true;
-            this.thresholdLabel.Location = new System.Drawing.Point(153, 558);
-            this.thresholdLabel.Name = "thresholdLabel";
-            this.thresholdLabel.Size = new System.Drawing.Size(45, 12);
-            this.thresholdLabel.TabIndex = 11;
-            this.thresholdLabel.Text = "임계값:";
-            // 
-            // thresholdNumeric
-            // 
-            this.thresholdNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.thresholdNumeric.Location = new System.Drawing.Point(206, 554);
-            this.thresholdNumeric.Maximum = new decimal(new int[] {
-            254,
-            0,
-            0,
-            0});
-            this.thresholdNumeric.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.thresholdNumeric.Name = "thresholdNumeric";
-            this.thresholdNumeric.Size = new System.Drawing.Size(70, 21);
-            this.thresholdNumeric.TabIndex = 12;
-            this.thresholdNumeric.Value = new decimal(new int[] {
-            125,
-            0,
-            0,
-            0});
-            // 
             // filterScrollBar
             // 
             this.filterScrollBar.LargeChange = 1;
-            this.filterScrollBar.Location = new System.Drawing.Point(15, 607);
-            this.filterScrollBar.Maximum = 7;
+            this.filterScrollBar.Location = new System.Drawing.Point(894, 526);
+            this.filterScrollBar.Maximum = 8;
             this.filterScrollBar.Name = "filterScrollBar";
             this.filterScrollBar.Size = new System.Drawing.Size(121, 22);
             this.filterScrollBar.TabIndex = 13;
@@ -188,21 +158,65 @@
             // 
             // filterLabel
             // 
-            this.filterLabel.Location = new System.Drawing.Point(13, 586);
+            this.filterLabel.Location = new System.Drawing.Point(892, 505);
             this.filterLabel.Name = "filterLabel";
             this.filterLabel.Size = new System.Drawing.Size(123, 23);
             this.filterLabel.TabIndex = 14;
-            this.filterLabel.Text = "필터 없음";
+            this.filterLabel.Text = "NONE";
             this.filterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // thresholdLabel
+            // 
+            this.thresholdLabel.AutoSize = true;
+            this.thresholdLabel.Location = new System.Drawing.Point(153, 558);
+            this.thresholdLabel.Name = "thresholdLabel";
+            this.thresholdLabel.Size = new System.Drawing.Size(63, 12);
+            this.thresholdLabel.TabIndex = 11;
+            this.thresholdLabel.Text = "임계값:125";
+            // 
+            // thresholdBar
+            // 
+            this.thresholdBar.Location = new System.Drawing.Point(251, 554);
+            this.thresholdBar.Maximum = 254;
+            this.thresholdBar.Minimum = 1;
+            this.thresholdBar.Name = "thresholdBar";
+            this.thresholdBar.Size = new System.Drawing.Size(336, 45);
+            this.thresholdBar.TabIndex = 15;
+            this.thresholdBar.Value = 1;
+            this.thresholdBar.Scroll += new System.EventHandler(this.ThresholdBar_Scroll);
+            // 
+            // filterSizeLabel
+            // 
+            this.filterSizeLabel.AutoSize = true;
+            this.filterSizeLabel.Location = new System.Drawing.Point(1039, 526);
+            this.filterSizeLabel.Name = "filterSizeLabel";
+            this.filterSizeLabel.Size = new System.Drawing.Size(73, 12);
+            this.filterSizeLabel.TabIndex = 16;
+            this.filterSizeLabel.Text = "필터 사이즈:";
+            // 
+            // filterSizeBox
+            // 
+            this.filterSizeBox.FormattingEnabled = true;
+            this.filterSizeBox.Items.AddRange(new object[] {
+            "1",
+            "3",
+            "9"});
+            this.filterSizeBox.Location = new System.Drawing.Point(1116, 523);
+            this.filterSizeBox.Name = "filterSizeBox";
+            this.filterSizeBox.Size = new System.Drawing.Size(36, 20);
+            this.filterSizeBox.TabIndex = 18;
+            this.filterSizeBox.SelectedIndexChanged += new System.EventHandler(this.FilterSizeBox_SelectedIndexChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1309, 638);
+            this.ClientSize = new System.Drawing.Size(1309, 604);
+            this.Controls.Add(this.filterSizeBox);
+            this.Controls.Add(this.filterSizeLabel);
+            this.Controls.Add(this.thresholdBar);
             this.Controls.Add(this.filterLabel);
             this.Controls.Add(this.filterScrollBar);
-            this.Controls.Add(this.thresholdNumeric);
             this.Controls.Add(this.thresholdLabel);
             this.Controls.Add(this.channel3Box);
             this.Controls.Add(this.channel2Box);
@@ -211,14 +225,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.connectBox);
             this.Controls.Add(this.pathBox);
-            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.filterBox);
             this.Controls.Add(this.originalBox);
             this.Name = "MainForm";
             this.Text = "TransVison";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.thresholdNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filterBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,7 +241,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox originalBox;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox filterBox;
         private System.Windows.Forms.TextBox pathBox;
         private System.Windows.Forms.CheckBox connectBox;
         private System.Windows.Forms.Label label1;
@@ -235,10 +249,12 @@
         private System.Windows.Forms.CheckBox channel1Box;
         private System.Windows.Forms.CheckBox channel2Box;
         private System.Windows.Forms.CheckBox channel3Box;
-        private System.Windows.Forms.Label thresholdLabel;
-        private System.Windows.Forms.NumericUpDown thresholdNumeric;
         private System.Windows.Forms.HScrollBar filterScrollBar;
         private System.Windows.Forms.Label filterLabel;
+        private System.Windows.Forms.Label thresholdLabel;
+        private System.Windows.Forms.TrackBar thresholdBar;
+        private System.Windows.Forms.Label filterSizeLabel;
+        private System.Windows.Forms.ComboBox filterSizeBox;
     }
 }
 

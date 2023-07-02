@@ -19,8 +19,15 @@ namespace TransVison
     {
         private MJPEGStream stream = null;
         private ColorModel currentModel = ColorModel.RGB;
+        private FilterType type = FilterType.NONE;
+
         private bool checkBoxHide = false;
         private bool thresholdHide = true;
+        private bool filterSizeHide = false;
+
+        private int threshold = 0;
+        private int filterValue = 0;
+
         public MainForm()
         {
             InitializeComponent();
@@ -33,7 +40,12 @@ namespace TransVison
             stream.Password = "kkmd1234";
             colorModelBox.SelectedIndex = 0;
             thresholdLabel.Hide();
-            thresholdNumeric.Hide();
+            thresholdBar.Hide();
+            threshold = 125;
+            filterSizeBox.SelectedIndex = 1;
+            filterValue = Convert.ToInt32(filterSizeBox.SelectedItem.ToString());
+            thresholdBar.Value = threshold;
+
         }
         private void ConnectBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -59,41 +71,64 @@ namespace TransVison
         private void Video_Stream(object sender, NewFrameEventArgs eventArgs)
         {
             Bitmap source = (Bitmap)eventArgs.Frame.Clone();
-            Bitmap destination;
-            if (currentModel == ColorModel.RGB)
+            Bitmap colorModelBMP = source;
+
+            switch (currentModel)
             {
-                destination = GetVideo(source.ToMat());
-                originalBox.Image?.Dispose();
-                originalBox.Image = destination;
+                case ColorModel.RGB:
+                    colorModelBMP = GetVideo(source.ToMat());
+                    break;
+                case ColorModel.HSV:
+                    colorModelBMP = GetVideo(TransVison.GetHSV(source));
+                    break;
+                case ColorModel.YCbCr:
+                    colorModelBMP = GetVideo(TransVison.GetYCbCr(source));
+                    break;
+                case ColorModel.GRAY:
+                    colorModelBMP = TransVison.GetGray(source).ToBitmap();
+                    break;
+                case ColorModel.BINARY:
+                    colorModelBMP = TransVison.GetBinary(source, threshold).ToBitmap();
+                    break;
             }
-            else
-            if (currentModel == ColorModel.HSV)
-            {
-                destination = GetVideo(TransVison.GetHSV(source));
-                originalBox.Image?.Dispose();
-                originalBox.Image = destination;
+            originalBox.Image?.Dispose();
+            originalBox.Image = colorModelBMP;
+   
+            if(type == FilterType.NONE)
+                return;
+
+            Bitmap filterSource = (Bitmap)colorModelBMP.Clone();
+            Bitmap filterBMP = colorModelBMP;
+
+            switch (type) {
+                case FilterType.MEDIAN:
+                    filterBMP = TransVison.GetMedian(filterSource, filterValue).ToBitmap();
+                    break;
+                case FilterType.MEAN:
+                    filterBMP = TransVison.GetMean(filterSource, filterValue).ToBitmap();
+                    break;
+                case FilterType.GAUSSIAN:
+                    filterBMP = TransVison.GetGaussian(filterSource, filterValue).ToBitmap();
+                    break;
+                case FilterType.SOBEL:
+                    filterBMP = TransVison.GetSobel(filterSource, filterValue).ToBitmap();
+                    break;
+                case FilterType.CANNY:
+                    filterBMP = TransVison.GetCanny(filterSource, filterValue).ToBitmap();
+                    break;
+                case FilterType.PREWITT:
+                    filterBMP = TransVison.GetPrewitt(filterSource).ToBitmap();
+                    break;
+                case FilterType.ROBERTS:
+                    filterBMP = TransVison.GetRoberts(filterSource).ToBitmap();
+                    break;
+                case FilterType.LAPLACIAN:
+                    filterBMP = TransVison.GetLaplacian(filterSource).ToBitmap();
+                    break;
             }
-            else
-            if (currentModel == ColorModel.YCbCr)
-            {
-                destination = GetVideo(TransVison.GetYCbCr(source));
-                originalBox.Image?.Dispose();
-                originalBox.Image = destination;
-            }
-            else
-            if (currentModel == ColorModel.GRAY)
-            {
-                destination = TransVison.GetGray(source).ToBitmap();
-                originalBox.Image?.Dispose();
-                originalBox.Image = destination;
-            }
-            else
-            if (currentModel == ColorModel.BINARY)
-            {
-                destination = TransVison.GetBinary(source, (int)thresholdNumeric.Value).ToBitmap();
-                originalBox.Image?.Dispose();
-                originalBox.Image = destination;
-            }
+
+            filterBox.Image?.Dispose();
+            filterBox.Image = filterBMP;
         }
 
         private void ColorModelBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,9 +142,9 @@ namespace TransVison
             switch (model)
             {
                 case ColorModel.RGB:
-                    channel1Box.Text = "Red";
+                    channel1Box.Text = "Blue";
                     channel2Box.Text = "Green";
-                    channel3Box.Text = "Blue";
+                    channel3Box.Text = "Red";
                     SetCheckBoxHide(false);
                     SetThresholdCtrlHide(true);
                     break;
@@ -139,22 +174,18 @@ namespace TransVison
         }
         private Bitmap GetVideo(Mat src)
         {
-            Mat dst = new Mat();
-            Mat[] channel = Cv2.Split(src);
+            Mat[] rgb = Cv2.Split(src);
 
             if (channel1Box.Checked)
-                channel[0] = Mat.Zeros(channel[0].Size(), MatType.CV_8UC1);
+                return rgb[0].ToBitmap();
             else
             if (channel2Box.Checked)
-                channel[1] = Mat.Zeros(channel[1].Size(), MatType.CV_8UC1);
+                return rgb[1].ToBitmap();
             else
             if (channel3Box.Checked)
-                channel[2] = Mat.Zeros(channel[2].Size(), MatType.CV_8UC1);
-            else
-                return src.ToBitmap();
-            Cv2.Merge(channel, dst);
+                return rgb[2].ToBitmap();
 
-            return dst.ToBitmap();
+            return src.ToBitmap();
         }
         private void Channel1Box_CheckedChanged(object sender, EventArgs e)
         {
@@ -175,8 +206,22 @@ namespace TransVison
         }
         private void FilterScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
-            FilterType type = (FilterType)filterScrollBar.Value;
+            type = (FilterType)filterScrollBar.Value;
             filterLabel.Text = type.ToString();
+            if ((int)type < (int)FilterType.SOBEL)
+            {
+                if (filterSizeHide == true) return;
+                filterSizeHide = true;
+                filterSizeBox.Show();
+                filterSizeLabel.Show();
+            }
+            else
+            {
+                if (filterSizeHide == false) return;
+                filterSizeHide = false;
+                filterSizeBox.Hide();
+                filterSizeLabel.Hide();
+            }
         }
         private void SetCheckBoxHide(bool flag)
         {
@@ -201,16 +246,26 @@ namespace TransVison
             if (thresholdHide == false && flag == true)
             {
                 thresholdLabel.Hide();
-                thresholdNumeric.Hide();
+                thresholdBar.Hide();
                 thresholdHide = true;
             }
             else
             if (thresholdHide == true && flag == false)
             {
                 thresholdLabel.Show();
-                thresholdNumeric.Show();
+                thresholdBar.Show();
                 thresholdHide = false;
             }
+        }
+        private void ThresholdBar_Scroll(object sender, EventArgs e)
+        {
+            threshold = thresholdBar.Value;
+            thresholdLabel.Text = $"임계값:{threshold}";
+        }
+
+        private void FilterSizeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterValue = Convert.ToInt32(filterSizeBox.SelectedItem.ToString()) ;
         }
     }
 }
