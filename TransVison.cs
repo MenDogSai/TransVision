@@ -11,6 +11,9 @@ using System.Web;
 
 namespace TransVison
 {
+    /// <summary>
+    /// 주요 컬러 모델
+    /// </summary>
     public enum ColorModel
     {
         RGB   = 0, 
@@ -19,7 +22,9 @@ namespace TransVison
         GRAY  = 3,
         BINARY = 4,
     }
-
+    /// <summary>
+    /// 필터 종류 0~3까지는 블러 필터 4~8까지는 가장 자리 검출 필터
+    /// </summary>
     public enum FilterType
     {
         NONE = 0,
