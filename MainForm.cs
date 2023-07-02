@@ -70,67 +70,75 @@ namespace TransVison
         }
         private void Video_Stream(object sender, NewFrameEventArgs eventArgs)
         {
-            Bitmap source = (Bitmap)eventArgs.Frame.Clone();
-            Bitmap colorModelBMP = source;
-
-            switch (currentModel)
-            {
-                case ColorModel.RGB:
-                    colorModelBMP = GetVideo(source.ToMat());
-                    break;
-                case ColorModel.HSV:
-                    colorModelBMP = GetVideo(TransVison.GetHSV(source));
-                    break;
-                case ColorModel.YCbCr:
-                    colorModelBMP = GetVideo(TransVison.GetYCbCr(source));
-                    break;
-                case ColorModel.GRAY:
-                    colorModelBMP = TransVison.GetGray(source).ToBitmap();
-                    break;
-                case ColorModel.BINARY:
-                    colorModelBMP = TransVison.GetBinary(source, threshold).ToBitmap();
-                    break;
-            }
-            originalBox.Image?.Dispose();
-            originalBox.Image = colorModelBMP;
+            Bitmap colorSrc = (Bitmap)eventArgs.Frame.Clone();
+            originalBox.Image = GetColorModel(colorSrc);
    
             if(type == FilterType.NONE)
                 return;
 
-            Bitmap filterSource = (Bitmap)colorModelBMP.Clone();
-            Bitmap filterBMP = colorModelBMP;
-
-            switch (type) {
-                case FilterType.MEDIAN:
-                    filterBMP = TransVison.GetMedian(filterSource, filterValue).ToBitmap();
-                    break;
-                case FilterType.MEAN:
-                    filterBMP = TransVison.GetMean(filterSource, filterValue).ToBitmap();
-                    break;
-                case FilterType.GAUSSIAN:
-                    filterBMP = TransVison.GetGaussian(filterSource, filterValue).ToBitmap();
-                    break;
-                case FilterType.SOBEL:
-                    filterBMP = TransVison.GetSobel(filterSource, filterValue).ToBitmap();
-                    break;
-                case FilterType.CANNY:
-                    filterBMP = TransVison.GetCanny(filterSource, filterValue).ToBitmap();
-                    break;
-                case FilterType.PREWITT:
-                    filterBMP = TransVison.GetPrewitt(filterSource).ToBitmap();
-                    break;
-                case FilterType.ROBERTS:
-                    filterBMP = TransVison.GetRoberts(filterSource).ToBitmap();
-                    break;
-                case FilterType.LAPLACIAN:
-                    filterBMP = TransVison.GetLaplacian(filterSource).ToBitmap();
-                    break;
-            }
-
-            filterBox.Image?.Dispose();
-            filterBox.Image = filterBMP;
+            Bitmap filterSrc = (Bitmap)eventArgs.Frame.Clone();
+            filterBox.Image = GetFilter(filterSrc);
         }
+        /// <summary>
+        /// Mat 이미지를  컬러 모델 의 3채널로 분리 해서 
+        /// 각각 비트맵 이미지를 반환
+        /// </summary>
+        private Bitmap GetVideo(Mat src)
+        {
+            Mat[] rgb = Cv2.Split(src);
 
+            if (channel1Box.Checked)
+                return rgb[0].ToBitmap();
+            else
+            if (channel2Box.Checked)
+                return rgb[1].ToBitmap();
+            else
+            if (channel3Box.Checked)
+                return rgb[2].ToBitmap();
+
+            return src.ToBitmap();
+        }
+        private Bitmap GetColorModel(Bitmap src)
+        {
+            switch (currentModel)
+            {
+                case ColorModel.RGB:
+                    return GetVideo(src.ToMat());
+                case ColorModel.HSV:
+                    return GetVideo(TransVison.GetHSV(src));
+                case ColorModel.YCbCr:
+                    return GetVideo(TransVison.GetYCbCr(src));
+                case ColorModel.GRAY:
+                    return TransVison.GetGray(src).ToBitmap();
+                case ColorModel.BINARY:
+                    return TransVison.GetBinary(src, threshold).ToBitmap();
+            }
+            return src;
+        }
+        private Bitmap GetFilter(Bitmap src)
+        {
+            switch (type)
+            {
+                case FilterType.MEDIAN:
+                    return TransVison.GetMedian(src, filterValue).ToBitmap();
+                case FilterType.MEAN:
+                    return TransVison.GetMean(src, filterValue).ToBitmap();
+                case FilterType.GAUSSIAN:
+                    return TransVison.GetGaussian(src, filterValue).ToBitmap();
+                case FilterType.SOBEL:
+                    return TransVison.GetSobel(src).ToBitmap();
+                case FilterType.CANNY:
+                    return TransVison.GetCanny(src).ToBitmap();
+                case FilterType.PREWITT:
+                    return TransVison.GetPrewitt(src).ToBitmap();
+                case FilterType.ROBERTS:
+                    return TransVison.GetRoberts(src).ToBitmap();
+                case FilterType.LAPLACIAN:
+                    return TransVison.GetLaplacian(src).ToBitmap();
+            }
+            return src;
+        }
+        #region GUI 제어에 필요한 코드 영력
         private void ColorModelBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ColorModelChanged((ColorModel)colorModelBox.SelectedIndex);
@@ -171,21 +179,6 @@ namespace TransVison
                     SetThresholdCtrlHide(false);
                     break;
             }
-        }
-        private Bitmap GetVideo(Mat src)
-        {
-            Mat[] rgb = Cv2.Split(src);
-
-            if (channel1Box.Checked)
-                return rgb[0].ToBitmap();
-            else
-            if (channel2Box.Checked)
-                return rgb[1].ToBitmap();
-            else
-            if (channel3Box.Checked)
-                return rgb[2].ToBitmap();
-
-            return src.ToBitmap();
         }
         private void Channel1Box_CheckedChanged(object sender, EventArgs e)
         {
@@ -267,5 +260,6 @@ namespace TransVison
         {
             filterValue = Convert.ToInt32(filterSizeBox.SelectedItem.ToString()) ;
         }
+        #endregion
     }
 }

@@ -72,7 +72,7 @@
             this.pathBox.Name = "pathBox";
             this.pathBox.Size = new System.Drawing.Size(528, 21);
             this.pathBox.TabIndex = 2;
-            this.pathBox.Text = "http://192.168.0.3:4747/video?640x480";
+            this.pathBox.Text = "http://192.168.0.76:4747/video?640x480";
             // 
             // connectBox
             // 

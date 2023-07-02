@@ -86,14 +86,14 @@ namespace TransVison
             Cv2.Blur(src, dst, ksize);
             return dst;
         }
-        static public Mat GetSobel(Bitmap source, int filterSize)
+        static public Mat GetSobel(Bitmap source)
         {
             Mat src = source.ToMat();
 
             Mat dx = new Mat(source.Height, source.Height, MatType.CV_32FC1);
             Mat dy = new Mat(source.Height, source.Height, MatType.CV_32FC1);
-            Cv2.Sobel(src, dx, MatType.CV_32FC1, 1, 0, filterSize, 1.0, 0, BorderTypes.Default);
-            Cv2.Sobel(src, dy, MatType.CV_32FC1, 0, 1, filterSize, 1.0, 0, BorderTypes.Default);
+            Cv2.Sobel(src, dx, MatType.CV_32FC1, 1, 0);
+            Cv2.Sobel(src, dy, MatType.CV_32FC1, 0, 1);
 
             Mat dst = Cv2.Abs(dx) + Cv2.Abs(dy);
             dst.ConvertTo(dst, MatType.CV_8UC3);
@@ -111,14 +111,11 @@ namespace TransVison
 
             return dst;
         }
-        static public Mat GetCanny(Bitmap source, int filterSize)
+        static public Mat GetCanny(Bitmap source)
         {
-            OpenCvSharp.Size ksize;
-            ksize.Width = filterSize;
-            ksize.Height = filterSize;
-
             Mat src = source.ToMat();
             Mat dst = new Mat(source.Height, source.Height, MatType.CV_8UC3);
+            //threshold 값100, 200은 임의 값으로 GUI 옵션으로 설정할 필요 있음
             Cv2.Canny(src, dst, 100, 200);
 
             return dst;
