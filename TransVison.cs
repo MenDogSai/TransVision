@@ -86,6 +86,18 @@ namespace TransVison
             Cv2.Blur(src, dst, ksize);
             return dst;
         }
+        static public Mat GetGaussian(Bitmap source, int filterSize)
+        {
+            OpenCvSharp.Size ksize;
+            ksize.Width = filterSize;
+            ksize.Height = filterSize;
+
+            Mat src = source.ToMat();
+            Mat dst = new Mat(source.Height, source.Height, MatType.CV_8UC3);
+            Cv2.GaussianBlur(src, dst, ksize, 1, 1, BorderTypes.Default);
+
+            return dst;
+        }
         static public Mat GetSobel(Bitmap source)
         {
             Mat src = source.ToMat();
@@ -97,18 +109,6 @@ namespace TransVison
 
             Mat dst = Cv2.Abs(dx) + Cv2.Abs(dy);
             dst.ConvertTo(dst, MatType.CV_8UC3);
-            return dst;
-        }
-        static public Mat GetGaussian(Bitmap source, int filterSize)
-        {
-            OpenCvSharp.Size ksize;
-            ksize.Width = filterSize;
-            ksize.Height = filterSize;
-
-            Mat src = source.ToMat();
-            Mat dst = new Mat(source.Height, source.Height, MatType.CV_8UC3);
-            Cv2.GaussianBlur(src, dst, ksize, 1, 1, BorderTypes.Default);
-
             return dst;
         }
         static public Mat GetCanny(Bitmap source)
