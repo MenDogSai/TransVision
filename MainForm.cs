@@ -138,7 +138,7 @@ namespace TransVison
             }
             return src;
         }
-        #region GUI 제어에 필요한 코드 영력
+        #region GUI 제어에 필요한 코드 영역
         private void ColorModelBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ColorModelChanged((ColorModel)colorModelBox.SelectedIndex);
