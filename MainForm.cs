@@ -59,7 +59,7 @@ namespace TransVison
                     stream.Stop();
                 }
                 stream.Start();
-                connectBox.Text = "연결 됨";
+                connectBox.Text = "연결 끊음";
             }
             else
             {
@@ -76,7 +76,7 @@ namespace TransVison
             if(type == FilterType.NONE)
                 return;
 
-            Bitmap filterSrc = (Bitmap)eventArgs.Frame.Clone();
+            Bitmap filterSrc = (Bitmap)originalBox.Image.Clone();
             filterBox.Image = GetFilter(filterSrc);
         }
         /// <summary>

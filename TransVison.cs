@@ -122,18 +122,18 @@ namespace TransVison
         }
         static public Mat GetPrewitt(Bitmap source)
         {
-            float[] maskX = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
-            float[] maskY = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+            float[] maskX = { -1,  0,  1, -1, 0, 1,  -1, 0, 1 };
+            float[] maskY = { -1, -1, -1,  0, 0, 0,   1, 1, 1 };
 
             Mat src = source.ToMat();
             Mat matMaskX = new Mat(3, 3, MatType.CV_32FC1, maskX);
-            Mat matMaskX = new Mat(3, 3, MatType.CV_32FC1, maskY);
+            Mat matMaskY = new Mat(3, 3, MatType.CV_32FC1, maskY);
 
             Mat dx = new Mat();
             Mat dy = new Mat();
 
             Cv2.Filter2D(src, dx, -1, matMaskX);
-            Cv2.Filter2D(src, dy, -1, matMaskX);
+            Cv2.Filter2D(src, dy, -1, matMaskY);
 
             Mat dst = Cv2.Abs(dx) + Cv2.Abs(dy);
             dst.ConvertTo(dst, MatType.CV_8U);
@@ -146,13 +146,13 @@ namespace TransVison
 
             Mat src = source.ToMat();
             Mat matMaskX = new Mat(3, 3, MatType.CV_32FC1, maskX);
-            Mat matMaskX = new Mat(3, 3, MatType.CV_32FC1, maskY);
+            Mat matMaskY = new Mat(3, 3, MatType.CV_32FC1, maskY);
 
             Mat dx = new Mat();
             Mat dy = new Mat();
 
             Cv2.Filter2D(src, dx, -1, matMaskX);
-            Cv2.Filter2D(src, dy, -1, matMaskX);
+            Cv2.Filter2D(src, dy, -1, matMaskY);
 
             Mat dst = Cv2.Abs(dx) + Cv2.Abs(dy);
             dst.ConvertTo(dst, MatType.CV_8U);

@@ -70,14 +70,14 @@
             // 
             this.pathBox.Location = new System.Drawing.Point(12, 526);
             this.pathBox.Name = "pathBox";
-            this.pathBox.Size = new System.Drawing.Size(528, 21);
+            this.pathBox.Size = new System.Drawing.Size(465, 21);
             this.pathBox.TabIndex = 2;
             this.pathBox.Text = "http://192.168.0.76:4747/video?640x480";
             // 
             // connectBox
             // 
             this.connectBox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.connectBox.Location = new System.Drawing.Point(548, 524);
+            this.connectBox.Location = new System.Drawing.Point(483, 526);
             this.connectBox.Name = "connectBox";
             this.connectBox.Size = new System.Drawing.Size(104, 24);
             this.connectBox.TabIndex = 3;
