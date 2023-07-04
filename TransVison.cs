@@ -16,26 +16,31 @@ namespace TransVison
     /// </summary>
     public enum ColorModel
     {
-        RGB   = 0, 
-        HSV   = 1,
+        RGB = 0,
+        HSV = 1,
         YCbCr = 2,
-        GRAY  = 3,
+        GRAY = 3,
         BINARY = 4,
     }
-    /// <summary>
-    /// 필터 종류 0~3까지는 블러 필터 4~8까지는 가장 자리 검출 필터
-    /// </summary>
-    public enum FilterType
+    public enum BlurFilter
     {
         NONE = 0,
         MEDIAN = 1,
         MEAN = 2,
         GAUSSIAN = 3,
-        SOBEL = 4,
-        CANNY = 5,
-        PREWITT = 6,
-        ROBERTS = 7,
-        LAPLACIAN = 8,
+        BILATERAL = 4,
+    }
+    /// <summary>
+    /// 필터 종류 0~3까지는 블러 필터 4~8까지는 가장 자리 검출 필터
+    /// </summary>
+    public enum EdgeFilter
+    {
+        NONE = 0,
+        SOBEL = 1,
+        CANNY = 2,
+        PREWITT = 3,
+        ROBERTS = 4,
+        LAPLACIAN = 5,
     }
 
     static internal class TransVison
@@ -95,6 +100,14 @@ namespace TransVison
             Mat src = source.ToMat();
             Mat dst = new Mat(source.Height, source.Height, MatType.CV_8UC3);
             Cv2.GaussianBlur(src, dst, ksize, 1, 1, BorderTypes.Default);
+
+            return dst;
+        }
+        static public Mat GetBilateral(Bitmap source, int filterSize)
+        {
+            Mat src = source.ToMat();
+            Mat dst = new Mat(source.Height, source.Height, MatType.CV_8UC3);
+            Cv2.BilateralFilter(src, dst, -1, filterSize, 10);
 
             return dst;
         }

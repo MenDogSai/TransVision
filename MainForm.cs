@@ -19,14 +19,13 @@ namespace TransVison
     {
         private MJPEGStream stream = null;
         private ColorModel currentModel = ColorModel.RGB;
-        private FilterType type = FilterType.NONE;
+        private BlurFilter currentBlur = BlurFilter.NONE;
+        private EdgeFilter currentEdge = EdgeFilter.NONE;
 
         private bool checkBoxHide = false;
         private bool thresholdHide = true;
-        private bool filterSizeHide = false;
 
         private int threshold = 0;
-        private int filterValue = 0;
 
         public MainForm()
         {
@@ -42,8 +41,6 @@ namespace TransVison
             thresholdLabel.Hide();
             thresholdBar.Hide();
             threshold = 125;
-            filterSizeBox.SelectedIndex = 1;
-            filterValue = Convert.ToInt32(filterSizeBox.SelectedItem.ToString());
             thresholdBar.Value = threshold;
 
         }
@@ -73,11 +70,12 @@ namespace TransVison
             Bitmap colorSrc = (Bitmap)eventArgs.Frame.Clone();
             originalBox.Image = GetColorModel(colorSrc);
    
-            if(type == FilterType.NONE)
-                return;
-
-            Bitmap filterSrc = (Bitmap)originalBox.Image.Clone();
-            filterBox.Image = GetFilter(filterSrc);
+            Bitmap blurSrc = (Bitmap)originalBox.Image.Clone();
+            Bitmap edgeSrc =  GetBlurFilter(blurSrc);
+            filterBox.Image = GetEdgeFilter(edgeSrc);
+            colorSrc.Clone();
+            blurSrc.Clone();
+            edgeSrc.Clone();
         }
         /// <summary>
         /// Mat 이미지를  컬러 모델 의 3채널로 분리 해서 
@@ -115,25 +113,34 @@ namespace TransVison
             }
             return src;
         }
-        private Bitmap GetFilter(Bitmap src)
+        private Bitmap GetBlurFilter(Bitmap src)
         {
-            switch (type)
+            switch (currentBlur)
             {
-                case FilterType.MEDIAN:
-                    return TransVison.GetMedian(src, filterValue).ToBitmap();
-                case FilterType.MEAN:
-                    return TransVison.GetMean(src, filterValue).ToBitmap();
-                case FilterType.GAUSSIAN:
-                    return TransVison.GetGaussian(src, filterValue).ToBitmap();
-                case FilterType.SOBEL:
+                case BlurFilter.MEDIAN:
+                    return TransVison.GetMedian(src, (int)filterSizeNumeric.Value).ToBitmap();
+                case BlurFilter.MEAN:
+                    return TransVison.GetMean(src, (int)filterSizeNumeric.Value).ToBitmap();
+                case BlurFilter.GAUSSIAN:
+                    return TransVison.GetGaussian(src, (int)filterSizeNumeric.Value).ToBitmap();
+                case BlurFilter.BILATERAL:
+                    return TransVison.GetBilateral(src, (int)filterSizeNumeric.Value).ToBitmap();
+            }
+            return src;
+        }
+        private Bitmap GetEdgeFilter(Bitmap src)
+        {
+            switch (currentEdge)
+            {
+                case EdgeFilter.SOBEL:
                     return TransVison.GetSobel(src).ToBitmap();
-                case FilterType.CANNY:
+                case EdgeFilter.CANNY:
                     return TransVison.GetCanny(src).ToBitmap();
-                case FilterType.PREWITT:
+                case EdgeFilter.PREWITT:
                     return TransVison.GetPrewitt(src).ToBitmap();
-                case FilterType.ROBERTS:
+                case EdgeFilter.ROBERTS:
                     return TransVison.GetRoberts(src).ToBitmap();
-                case FilterType.LAPLACIAN:
+                case EdgeFilter.LAPLACIAN:
                     return TransVison.GetLaplacian(src).ToBitmap();
             }
             return src;
@@ -197,25 +204,6 @@ namespace TransVison
             if (channel1Box.Checked) { channel1Box.Checked = false; }
             if (channel2Box.Checked) { channel2Box.Checked = false; }
         }
-        private void FilterScrollBar_Scroll(object sender, ScrollEventArgs e)
-        {
-            type = (FilterType)filterScrollBar.Value;
-            filterLabel.Text = type.ToString();
-            if ((int)type < (int)FilterType.SOBEL)
-            {
-                if (filterSizeHide == true) return;
-                filterSizeHide = true;
-                filterSizeBox.Show();
-                filterSizeLabel.Show();
-            }
-            else
-            {
-                if (filterSizeHide == false) return;
-                filterSizeHide = false;
-                filterSizeBox.Hide();
-                filterSizeLabel.Hide();
-            }
-        }
         private void SetCheckBoxHide(bool flag)
         {
             if (checkBoxHide == false && flag == true)
@@ -255,10 +243,59 @@ namespace TransVison
             threshold = thresholdBar.Value;
             thresholdLabel.Text = $"임계값:{threshold}";
         }
-
-        private void FilterSizeBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void BlurNoneButton_CheckedChanged(object sender, EventArgs e)
         {
-            filterValue = Convert.ToInt32(filterSizeBox.SelectedItem.ToString()) ;
+            currentBlur = BlurFilter.NONE;
+        }
+
+        private void BlurMedianButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentBlur = BlurFilter.MEDIAN;
+        }
+
+        private void BlurMeanButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentBlur = BlurFilter.MEAN;
+        }
+
+        private void BlurGaussianButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentBlur = BlurFilter.GAUSSIAN;
+        }
+
+        private void BlurBilateralButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentBlur = BlurFilter.BILATERAL;
+        }
+
+        private void EdgeNoneButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentEdge = EdgeFilter.NONE;
+        }
+
+        private void EdgeSobelButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentEdge = EdgeFilter.SOBEL;
+        }
+
+        private void EdgeCannyButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentEdge = EdgeFilter.CANNY;
+        }
+
+        private void EdgePrewittButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentEdge = EdgeFilter.PREWITT;
+        }
+
+        private void EdgeRobertsButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentEdge = EdgeFilter.ROBERTS;
+        }
+
+        private void EdgeLaplacianButton_CheckedChanged(object sender, EventArgs e)
+        {
+            currentEdge = EdgeFilter.LAPLACIAN;
         }
         #endregion
     }

@@ -32,20 +32,33 @@
             this.filterBox = new System.Windows.Forms.PictureBox();
             this.pathBox = new System.Windows.Forms.TextBox();
             this.connectBox = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.colorModelBox = new System.Windows.Forms.ComboBox();
             this.channel1Box = new System.Windows.Forms.CheckBox();
             this.channel2Box = new System.Windows.Forms.CheckBox();
             this.channel3Box = new System.Windows.Forms.CheckBox();
-            this.filterScrollBar = new System.Windows.Forms.HScrollBar();
-            this.filterLabel = new System.Windows.Forms.Label();
             this.thresholdLabel = new System.Windows.Forms.Label();
             this.thresholdBar = new System.Windows.Forms.TrackBar();
             this.filterSizeLabel = new System.Windows.Forms.Label();
-            this.filterSizeBox = new System.Windows.Forms.ComboBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.filterSizeNumeric = new System.Windows.Forms.NumericUpDown();
+            this.blurBilateralButton = new System.Windows.Forms.RadioButton();
+            this.blurGaussianButton = new System.Windows.Forms.RadioButton();
+            this.blurMeanButton = new System.Windows.Forms.RadioButton();
+            this.blurMedianButton = new System.Windows.Forms.RadioButton();
+            this.blurNoneButton = new System.Windows.Forms.RadioButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.edgeLaplacianButton = new System.Windows.Forms.RadioButton();
+            this.edgeRobertsButton = new System.Windows.Forms.RadioButton();
+            this.edgePrewittButton = new System.Windows.Forms.RadioButton();
+            this.edgeCannyButton = new System.Windows.Forms.RadioButton();
+            this.edgeSobelButton = new System.Windows.Forms.RadioButton();
+            this.edgeNoneButton = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.thresholdBar)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterSizeNumeric)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // originalBox
@@ -85,15 +98,6 @@
             this.connectBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.connectBox.UseVisualStyleBackColor = true;
             this.connectBox.CheckedChanged += new System.EventHandler(this.ConnectBox_CheckedChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 508);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "경로";
             // 
             // colorModelBox
             // 
@@ -146,25 +150,6 @@
             this.channel3Box.UseVisualStyleBackColor = true;
             this.channel3Box.CheckedChanged += new System.EventHandler(this.Channel3Box_CheckedChanged);
             // 
-            // filterScrollBar
-            // 
-            this.filterScrollBar.LargeChange = 1;
-            this.filterScrollBar.Location = new System.Drawing.Point(894, 526);
-            this.filterScrollBar.Maximum = 8;
-            this.filterScrollBar.Name = "filterScrollBar";
-            this.filterScrollBar.Size = new System.Drawing.Size(121, 22);
-            this.filterScrollBar.TabIndex = 13;
-            this.filterScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FilterScrollBar_Scroll);
-            // 
-            // filterLabel
-            // 
-            this.filterLabel.Location = new System.Drawing.Point(892, 505);
-            this.filterLabel.Name = "filterLabel";
-            this.filterLabel.Size = new System.Drawing.Size(123, 23);
-            this.filterLabel.TabIndex = 14;
-            this.filterLabel.Text = "NONE";
-            this.filterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // thresholdLabel
             // 
             this.thresholdLabel.AutoSize = true;
@@ -188,41 +173,204 @@
             // filterSizeLabel
             // 
             this.filterSizeLabel.AutoSize = true;
-            this.filterSizeLabel.Location = new System.Drawing.Point(1039, 526);
+            this.filterSizeLabel.Location = new System.Drawing.Point(441, 10);
             this.filterSizeLabel.Name = "filterSizeLabel";
             this.filterSizeLabel.Size = new System.Drawing.Size(73, 12);
             this.filterSizeLabel.TabIndex = 16;
             this.filterSizeLabel.Text = "필터 사이즈:";
             // 
-            // filterSizeBox
+            // panel1
             // 
-            this.filterSizeBox.FormattingEnabled = true;
-            this.filterSizeBox.Items.AddRange(new object[] {
-            "1",
-            "3",
-            "9"});
-            this.filterSizeBox.Location = new System.Drawing.Point(1116, 523);
-            this.filterSizeBox.Name = "filterSizeBox";
-            this.filterSizeBox.Size = new System.Drawing.Size(36, 20);
-            this.filterSizeBox.TabIndex = 18;
-            this.filterSizeBox.SelectedIndexChanged += new System.EventHandler(this.FilterSizeBox_SelectedIndexChanged);
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.filterSizeNumeric);
+            this.panel1.Controls.Add(this.blurBilateralButton);
+            this.panel1.Controls.Add(this.blurGaussianButton);
+            this.panel1.Controls.Add(this.blurMeanButton);
+            this.panel1.Controls.Add(this.filterSizeLabel);
+            this.panel1.Controls.Add(this.blurMedianButton);
+            this.panel1.Controls.Add(this.blurNoneButton);
+            this.panel1.Location = new System.Drawing.Point(658, 528);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(639, 33);
+            this.panel1.TabIndex = 19;
+            // 
+            // filterSizeNumeric
+            // 
+            this.filterSizeNumeric.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.filterSizeNumeric.Location = new System.Drawing.Point(520, 8);
+            this.filterSizeNumeric.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.filterSizeNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.filterSizeNumeric.Name = "filterSizeNumeric";
+            this.filterSizeNumeric.Size = new System.Drawing.Size(44, 21);
+            this.filterSizeNumeric.TabIndex = 21;
+            this.filterSizeNumeric.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // blurBilateralButton
+            // 
+            this.blurBilateralButton.Location = new System.Drawing.Point(355, 4);
+            this.blurBilateralButton.Name = "blurBilateralButton";
+            this.blurBilateralButton.Size = new System.Drawing.Size(82, 24);
+            this.blurBilateralButton.TabIndex = 20;
+            this.blurBilateralButton.TabStop = true;
+            this.blurBilateralButton.Text = "Bilateral";
+            this.blurBilateralButton.UseVisualStyleBackColor = true;
+            this.blurBilateralButton.CheckedChanged += new System.EventHandler(this.BlurBilateralButton_CheckedChanged);
+            // 
+            // blurGaussianButton
+            // 
+            this.blurGaussianButton.Location = new System.Drawing.Point(267, 4);
+            this.blurGaussianButton.Name = "blurGaussianButton";
+            this.blurGaussianButton.Size = new System.Drawing.Size(82, 24);
+            this.blurGaussianButton.TabIndex = 20;
+            this.blurGaussianButton.TabStop = true;
+            this.blurGaussianButton.Text = "Gaussian";
+            this.blurGaussianButton.UseVisualStyleBackColor = true;
+            this.blurGaussianButton.CheckedChanged += new System.EventHandler(this.BlurGaussianButton_CheckedChanged);
+            // 
+            // blurMeanButton
+            // 
+            this.blurMeanButton.Location = new System.Drawing.Point(179, 4);
+            this.blurMeanButton.Name = "blurMeanButton";
+            this.blurMeanButton.Size = new System.Drawing.Size(82, 24);
+            this.blurMeanButton.TabIndex = 20;
+            this.blurMeanButton.TabStop = true;
+            this.blurMeanButton.Text = "Mean";
+            this.blurMeanButton.UseVisualStyleBackColor = true;
+            this.blurMeanButton.CheckedChanged += new System.EventHandler(this.BlurMeanButton_CheckedChanged);
+            // 
+            // blurMedianButton
+            // 
+            this.blurMedianButton.Location = new System.Drawing.Point(91, 4);
+            this.blurMedianButton.Name = "blurMedianButton";
+            this.blurMedianButton.Size = new System.Drawing.Size(82, 24);
+            this.blurMedianButton.TabIndex = 2;
+            this.blurMedianButton.TabStop = true;
+            this.blurMedianButton.Text = "Median";
+            this.blurMedianButton.UseVisualStyleBackColor = true;
+            this.blurMedianButton.CheckedChanged += new System.EventHandler(this.BlurMedianButton_CheckedChanged);
+            // 
+            // blurNoneButton
+            // 
+            this.blurNoneButton.Checked = true;
+            this.blurNoneButton.Location = new System.Drawing.Point(3, 4);
+            this.blurNoneButton.Name = "blurNoneButton";
+            this.blurNoneButton.Size = new System.Drawing.Size(82, 24);
+            this.blurNoneButton.TabIndex = 1;
+            this.blurNoneButton.TabStop = true;
+            this.blurNoneButton.Text = "None";
+            this.blurNoneButton.UseVisualStyleBackColor = true;
+            this.blurNoneButton.CheckedChanged += new System.EventHandler(this.BlurNoneButton_CheckedChanged);
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.edgeLaplacianButton);
+            this.panel2.Controls.Add(this.edgeRobertsButton);
+            this.panel2.Controls.Add(this.edgePrewittButton);
+            this.panel2.Controls.Add(this.edgeCannyButton);
+            this.panel2.Controls.Add(this.edgeSobelButton);
+            this.panel2.Controls.Add(this.edgeNoneButton);
+            this.panel2.Location = new System.Drawing.Point(659, 571);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(639, 33);
+            this.panel2.TabIndex = 20;
+            // 
+            // edgeLaplacianButton
+            // 
+            this.edgeLaplacianButton.Location = new System.Drawing.Point(443, 3);
+            this.edgeLaplacianButton.Name = "edgeLaplacianButton";
+            this.edgeLaplacianButton.Size = new System.Drawing.Size(82, 24);
+            this.edgeLaplacianButton.TabIndex = 21;
+            this.edgeLaplacianButton.TabStop = true;
+            this.edgeLaplacianButton.Text = "Laplacian";
+            this.edgeLaplacianButton.UseVisualStyleBackColor = true;
+            this.edgeLaplacianButton.CheckedChanged += new System.EventHandler(this.EdgeLaplacianButton_CheckedChanged);
+            // 
+            // edgeRobertsButton
+            // 
+            this.edgeRobertsButton.Location = new System.Drawing.Point(355, 4);
+            this.edgeRobertsButton.Name = "edgeRobertsButton";
+            this.edgeRobertsButton.Size = new System.Drawing.Size(82, 24);
+            this.edgeRobertsButton.TabIndex = 20;
+            this.edgeRobertsButton.TabStop = true;
+            this.edgeRobertsButton.Text = "Roberts";
+            this.edgeRobertsButton.UseVisualStyleBackColor = true;
+            this.edgeRobertsButton.CheckedChanged += new System.EventHandler(this.EdgeRobertsButton_CheckedChanged);
+            // 
+            // edgePrewittButton
+            // 
+            this.edgePrewittButton.Location = new System.Drawing.Point(267, 4);
+            this.edgePrewittButton.Name = "edgePrewittButton";
+            this.edgePrewittButton.Size = new System.Drawing.Size(82, 24);
+            this.edgePrewittButton.TabIndex = 20;
+            this.edgePrewittButton.TabStop = true;
+            this.edgePrewittButton.Text = "Prewitt";
+            this.edgePrewittButton.UseVisualStyleBackColor = true;
+            this.edgePrewittButton.CheckedChanged += new System.EventHandler(this.EdgePrewittButton_CheckedChanged);
+            // 
+            // edgeCannyButton
+            // 
+            this.edgeCannyButton.Location = new System.Drawing.Point(179, 4);
+            this.edgeCannyButton.Name = "edgeCannyButton";
+            this.edgeCannyButton.Size = new System.Drawing.Size(82, 24);
+            this.edgeCannyButton.TabIndex = 20;
+            this.edgeCannyButton.TabStop = true;
+            this.edgeCannyButton.Text = "Canny";
+            this.edgeCannyButton.UseVisualStyleBackColor = true;
+            this.edgeCannyButton.CheckedChanged += new System.EventHandler(this.EdgeCannyButton_CheckedChanged);
+            // 
+            // edgeSobelButton
+            // 
+            this.edgeSobelButton.Location = new System.Drawing.Point(91, 4);
+            this.edgeSobelButton.Name = "edgeSobelButton";
+            this.edgeSobelButton.Size = new System.Drawing.Size(82, 24);
+            this.edgeSobelButton.TabIndex = 2;
+            this.edgeSobelButton.TabStop = true;
+            this.edgeSobelButton.Text = "Sobel";
+            this.edgeSobelButton.UseVisualStyleBackColor = true;
+            this.edgeSobelButton.CheckedChanged += new System.EventHandler(this.EdgeSobelButton_CheckedChanged);
+            // 
+            // edgeNoneButton
+            // 
+            this.edgeNoneButton.Checked = true;
+            this.edgeNoneButton.Location = new System.Drawing.Point(3, 4);
+            this.edgeNoneButton.Name = "edgeNoneButton";
+            this.edgeNoneButton.Size = new System.Drawing.Size(82, 24);
+            this.edgeNoneButton.TabIndex = 1;
+            this.edgeNoneButton.TabStop = true;
+            this.edgeNoneButton.Text = "None";
+            this.edgeNoneButton.UseVisualStyleBackColor = true;
+            this.edgeNoneButton.CheckedChanged += new System.EventHandler(this.EdgeNoneButton_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1309, 604);
-            this.Controls.Add(this.filterSizeBox);
-            this.Controls.Add(this.filterSizeLabel);
+            this.ClientSize = new System.Drawing.Size(1309, 618);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.thresholdBar);
-            this.Controls.Add(this.filterLabel);
-            this.Controls.Add(this.filterScrollBar);
             this.Controls.Add(this.thresholdLabel);
             this.Controls.Add(this.channel3Box);
             this.Controls.Add(this.channel2Box);
             this.Controls.Add(this.channel1Box);
             this.Controls.Add(this.colorModelBox);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.connectBox);
             this.Controls.Add(this.pathBox);
             this.Controls.Add(this.filterBox);
@@ -233,6 +381,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.originalBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.thresholdBar)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterSizeNumeric)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,17 +396,27 @@
         private System.Windows.Forms.PictureBox filterBox;
         private System.Windows.Forms.TextBox pathBox;
         private System.Windows.Forms.CheckBox connectBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox colorModelBox;
         private System.Windows.Forms.CheckBox channel1Box;
         private System.Windows.Forms.CheckBox channel2Box;
         private System.Windows.Forms.CheckBox channel3Box;
-        private System.Windows.Forms.HScrollBar filterScrollBar;
-        private System.Windows.Forms.Label filterLabel;
         private System.Windows.Forms.Label thresholdLabel;
         private System.Windows.Forms.TrackBar thresholdBar;
         private System.Windows.Forms.Label filterSizeLabel;
-        private System.Windows.Forms.ComboBox filterSizeBox;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton blurNoneButton;
+        private System.Windows.Forms.RadioButton blurBilateralButton;
+        private System.Windows.Forms.RadioButton blurGaussianButton;
+        private System.Windows.Forms.RadioButton blurMeanButton;
+        private System.Windows.Forms.RadioButton blurMedianButton;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RadioButton edgeRobertsButton;
+        private System.Windows.Forms.RadioButton edgePrewittButton;
+        private System.Windows.Forms.RadioButton edgeCannyButton;
+        private System.Windows.Forms.RadioButton edgeSobelButton;
+        private System.Windows.Forms.RadioButton edgeNoneButton;
+        private System.Windows.Forms.RadioButton edgeLaplacianButton;
+        private System.Windows.Forms.NumericUpDown filterSizeNumeric;
     }
 }
 
