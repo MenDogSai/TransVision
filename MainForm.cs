@@ -42,7 +42,6 @@ namespace TransVison
             thresholdBar.Hide();
             threshold = 125;
             thresholdBar.Value = threshold;
-
         }
         private void ConnectBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -73,9 +72,6 @@ namespace TransVison
             Bitmap blurSrc = (Bitmap)originalBox.Image.Clone();
             Bitmap edgeSrc =  GetBlurFilter(blurSrc);
             filterBox.Image = GetEdgeFilter(edgeSrc);
-            colorSrc.Clone();
-            blurSrc.Clone();
-            edgeSrc.Clone();
         }
         /// <summary>
         /// Mat 이미지를  컬러 모델 의 3채널로 분리 해서 
@@ -83,16 +79,16 @@ namespace TransVison
         /// </summary>
         private Bitmap GetVideo(Mat src)
         {
-            Mat[] rgb = Cv2.Split(src);
+            Mat[] channel = Cv2.Split(src);
 
             if (channel1Box.Checked)
-                return rgb[0].ToBitmap();
+                return channel[0].ToBitmap();
             else
             if (channel2Box.Checked)
-                return rgb[1].ToBitmap();
+                return channel[1].ToBitmap();
             else
             if (channel3Box.Checked)
-                return rgb[2].ToBitmap();
+                return channel[2].ToBitmap();
 
             return src.ToBitmap();
         }
